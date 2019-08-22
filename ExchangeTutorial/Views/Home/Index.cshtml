@@ -1,0 +1,13 @@
+﻿@model  ExchangeTutorial.Models.AuthVM
+
+@{
+	ViewBag.Title = "";
+
+	var authenticationUrl = Model.AuthUri.Replace("{clientId}", Model.ClientId)
+		.Replace("{redirectUri}", Model.RedirectUri)
+		.Replace("{scope}", Model.Scopes.Replace(" ", "+")).Replace("%26", "&");
+}
+
+<div class="jumbotron mt20">
+	<a href="@authenticationUrl" class="btn btn-primary">Get Access Token from Office 365</a>
+</div>

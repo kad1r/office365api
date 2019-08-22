@@ -1,0 +1,54 @@
+﻿@model IEnumerable<ExchangeTutorial.Models.MailVM>
+
+@using ExchangeTutorial.Helpers;
+
+@{
+	ViewBag.Title = "Exchange Mails";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h3>Mails</h3>
+<div class="row">
+	@foreach (var mail in Model)
+	{
+		<div class="col-5 bg-grey">
+			<div class="float-left"><i class="fa fa-user-circle-o"></i> @mail.From.Address</div>
+			<div class="float-right font-italic font-small">@(Html.Raw(DateHelper.GetDaysAgo(mail.DateSended)))</div>
+			<div class="	clearfix"></div>
+			<p class="font-weight-bold">
+				@(mail.HasAttachment ? Html.Raw("<i class='fa fa-paperclip'></i>") : Html.Raw(""))
+				@mail.Subject
+			</p>
+			<a href="javascript:void(0);" class="btn-link showContent">Show</a>
+		</div>
+		<div class="col-7">
+			<div class="d-none mailContent">@Html.Raw(mail.Body)</div>
+		</div>
+	}
+</div>
+
+@section scripts {
+	<script type="text/javascript">
+		$(function () {
+			$(".btn-link").on("click", function (e) {
+				e.preventDefault();
+				e.stopImmediatePropagation();
+				var th = $(this),
+					mailContent = th.parent().next().find(".mailContent");
+				// apply best practice to get mailContent, it's not a good solution for now.
+
+				if (th.hasClass("showContent")) {
+					th.removeClass("showContent").addClass("hideClass").text("Hide");
+
+					if (mailContent.length > 0) {
+						mailContent.removeClass("d-none");
+					}
+				} else {
+					th.removeClass("hideClass").addClass("showContent").text("Show");
+					mailContent.addClass("d-none");
+				}
+			});
+		});
+	</script>
+}
+
